@@ -8,7 +8,7 @@ module load R/3.4.0
 export PROJECT="archie-analyses"
 export HOME="$HOME/project-sriram/$PROJECT"
 
-export DATADIR="$SCRATCH/$PROJECT/data"
+export DATADIR="/u/scratch/e/ekmolloy/$PROJECT/data"
 export EXTERNALDIR="$HOME/external"
 export ARCHIESIMDIR="$EXTERNALDIR/ArchIE/simulations"
 export ARCHIEDATDIR="$EXTERNALDIR/ArchIE/data"
