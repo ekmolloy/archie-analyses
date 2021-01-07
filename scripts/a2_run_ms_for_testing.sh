@@ -3,8 +3,8 @@ set -e
 source export_vars.sh
 
 PARAMS=( $(head -n${SGE_TASK_ID} a1_training_parameters.txt | tail -n1) )
-MU=${PARAMS[1]}
-R=${PARAMS[2]}
+MU=${PARAMS[0]}
+R=${PARAMS[1]}
 SEEDISH=$(echo "$SGE_TASK_ID * 3" | bc)
 
 NTAR=100
@@ -15,7 +15,7 @@ NREPS=100
 TXT="testing_data.txt"
 LOG="testing_data.log"
 
-TESTDIR="$DATADIR/testing-data/msmodified.mu-${MU}.r-${R}"
+TESTDIR="$DATADIR/testing-data/msmodified.set-${SGE_TASK_ID}.mu-${MU}.r-${R}"
 mkdir -p $TESTDIR
 
 for REPL in `seq -f "%04g" 1 ${NREPS}`; do
