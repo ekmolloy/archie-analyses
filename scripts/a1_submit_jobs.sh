@@ -7,7 +7,7 @@ mkdir -p $DATADIR/training-data
 qsub -cwd \
      -V \
      -N "a1" \
-     -l h_data=32G,time=12:00:00,highp \
+     -l h_data=32G,time=18:00:00,highp \
      -t 1 \
      -m a \
      -M ekmolloy \

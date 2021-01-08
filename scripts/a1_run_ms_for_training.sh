@@ -17,7 +17,7 @@ LOG="training_data.log"
 TRAINDIR="$DATADIR/training-data/msmodified.set-${SGE_TASK_ID}.mu-${MU}.r-${R}"
 mkdir -p $TRAINDIR
 
-for REPL in `seq -f "%04g" 1 ${NREPS}`; do
+for REPL in `seq -f "%05g" 1 ${NREPS}`; do
     SIMDIR="$TRAINDIR/$REPL"
     if [ -d $SIMDIR ]; then
         echo "$SIMDIR already exists!"
@@ -25,7 +25,7 @@ for REPL in `seq -f "%04g" 1 ${NREPS}`; do
         mkdir $SIMDIR
         cd $SIMDIR
 
-        if [ $REPL == "0001" ]; then
+        if [ $REPL == "00001" ]; then
             echo "3579 27011 59243" > seedms
         else
             cp $LAST/seedms .
