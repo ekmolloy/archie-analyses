@@ -2,7 +2,7 @@ set -e
 
 source export_vars.sh
 
-PARAMS=( $(head -n${SGE_TASK_ID} a1_training_parameters.txt | tail -n1) )
+PARAMS=( $(head -n${SGE_TASK_ID} a2_testing_parameters.txt | tail -n1) )
 MU=${PARAMS[0]}
 R=${PARAMS[1]}
 SEEDISH=$(echo "$SGE_TASK_ID * 3" | bc)
