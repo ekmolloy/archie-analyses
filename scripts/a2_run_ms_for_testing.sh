@@ -23,13 +23,16 @@ TESTDIR="$DATADIR/testing-data/msmodified.set-${SGE_TASK_ID}.mu-${MU}.r-${R}"
 mkdir -p $TESTDIR
 
 for REPL in `seq -f "%05g" 1 ${NREPS}`; do
+    echo "Processing replicate $REPL..."
     SIMDIR="$TESTDIR/$REPL"
 
     if [ -d $SIMDIR ]; then
+        cd $SIMDIR
+
 	# Check ms completed
         DOMS=1
         if [ -e $MSLOG ]; then
-            if [ ! -z $(grep "done" $MSLOG) ]; then
+            if [ ! -z $(grep "done" $MSLOG | awk '{print $1}') ]; then
                 DOMS=0
             fi
         fi
@@ -48,15 +51,14 @@ for REPL in `seq -f "%05g" 1 ${NREPS}`; do
         fi
     else
         mkdir $SIMDIR
+        cd $SIMDIR
         DOMS=1
         DOAF=1
     fi
 
-    cd $SIMDIR
-
     if [ $DOMS -eq 1 ]; then
+        echo "  Simulating data with ms..."
         if [ $REPL == "00001" ]; then
-            echo "# Seedish = $SEEDISH" > $LOG
             SEED1=$(echo "3579 + $SEEDISH" | bc)
             SEED2=$(echo "27011 + $SEEDISH" | bc)
             SEED3=$(echo "59243 + $SEEDISH" | bc)
@@ -65,7 +67,7 @@ for REPL in `seq -f "%05g" 1 ${NREPS}`; do
             cp $LASTDIR/seedms .
         fi
 
-        echo "# Simulation model = $SGE_TASK_ID" > $MSLOG
+        echo "# Simulation model = $SEEDISH" > $MSLOG
         echo "# Recombination rate = $R" >> $MSLOG
         echo "# Mutation rate = $MU" >> $MSLOG
         echo "# Replicate = $REPL" >> $MSLOG
@@ -79,9 +81,11 @@ for REPL in `seq -f "%05g" 1 ${NREPS}`; do
         echo "# seedms file after ms = ${SEEDS[@]}" >> $MSLOG
 
 	echo "# done" >> $MSLOG
+        echo "  ...done"
     fi
 
     if [ $DOAF -eq 1 ]; then
+        echo "  Computing ArchIE features..."
         if [ $(wc -l out.snp | awk '{print $1}') -gt 0 ]; then
             CHR=$(head -n1 out.snp | sed 's/:/ /g' | awk '{print $1}')
             START=$(head -n1 out.snp | sed 's/:/ /g' | awk '{print $2}')
@@ -98,7 +102,9 @@ for REPL in `seq -f "%05g" 1 ${NREPS}`; do
                 -w $WINDOWLEN \
                 -z $STEPLEN 1> $AFOUT 2> $AFLOG
         fi
+        echo "  ...done"
     fi
+    echo "...done"
 
     LASTDIR="$SIMDIR"
 done
